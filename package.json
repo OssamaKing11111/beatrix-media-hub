@@ -19,6 +19,7 @@
     "framer-motion": "^10.18.0",
     "i18next": "^25.3.2",
     "lucide-react": "^0.307.0",
+    "mini-css-extract-plugin": "^2.9.2",
     "next": "14.0.4",
     "next-i18next": "^15.4.2",
     "react": "^18",
