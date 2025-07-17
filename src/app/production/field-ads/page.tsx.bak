@@ -1,0 +1,573 @@
+'use client'
+
+import React from 'react'
+import { motion } from 'framer-motion'
+import Image from 'next/image'
+import Link from 'next/link'
+import { ArrowRight, Camera, CheckCircle, MapPin, Megaphone, Target, Users } from 'lucide-react'
+import { IconType } from 'lucide-react'
+import ContactForm from '@/components/ContactForm'
+import { ParallaxGallery } from '@/components/ParallaxGallery'
+
+interface FeatureType {
+  icon: LucideIcon
+  title: string
+  description: string
+}
+
+interface AdType {
+  name: string
+  description: string
+  image: string
+  locations: string[]
+  reach: string
+}
+
+interface CampaignStep {
+  step: number
+  title: string
+  description: string
+  icon: string
+}
+
+interface Campaign {
+  client: string
+  campaign: string
+  location: string
+  result: string
+  image: string
+  duration: string
+}
+
+interface LocationCategory {
+  category: string
+  locations: string[]
+  audience: string
+  bestFor: string
+}
+
+interface ServiceOption {
+  value: string
+  label: string
+}
+
+import type { NextPage } from 'next'
+
+const FieldAdsPage: NextPage = () => {
+
+  const adTypes = [
+    {
+      name: 'الإعلانات الخارجية',
+      description: 'لوحات إعلانية في المواقع الحيوية والطرق الرئيسية',
+      image: 'https://images.unsplash.com/photo-1533750516457-a7f992034fec?w=400&h=300&fit=crop',
+      locations: ['الطرق السريعة', 'المراكز التجارية', 'المحطات'],
+      reach: '100,000+ مشاهدة يومياً'
+    },
+    {
+      name: 'الفعاليات التسويقية',
+      description: 'أنشطة تسويقية مباشرة في الأماكن العامة',
+      image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=300&fit=crop',
+      locations: ['الجامعات', 'المولات', 'المعارض'],
+      reach: '5,000+ تفاعل مباشر'
+    },
+    {
+      name: 'الإعلانات المتنقلة',
+      description: 'شاشات إعلانية متحركة تصل إلى مناطق متعددة',
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop',
+      locations: ['الأحياء السكنية', 'المناطق التجارية', 'الفعاليات'],
+      reach: '50,000+ مشاهدة متنوعة'
+    },
+    {
+      name: 'التسويق الشارعي',
+      description: 'حملات تسويقية إبداعية في الشوارع والميادين',
+      image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=300&fit=crop',
+      locations: ['الميادين الرئيسية', 'الأسواق', 'المقاهي'],
+      reach: '20,000+ تفاعل يومي'
+    }
+  ]
+
+  const campaignProcess = [
+    {
+      step: 1,
+      title: 'دراسة السوق والموقع',
+      description: 'نحلل السوق المستهدف ونختار أفضل المواقع',
+      icon: '📊'
+    },
+    {
+      step: 2,
+      title: 'تطوير الاستراتيجية',
+      description: 'نضع خطة شاملة للحملة الإعلانية الميدانية',
+      icon: '🎯'
+    },
+    {
+      step: 3,
+      title: 'التصميم والإنتاج',
+      description: 'نصمم المواد الإعلانية ونجهز المعدات',
+      icon: '🎨'
+    },
+    {
+      step: 4,
+      title: 'التنفيذ الميداني',
+      description: 'ننفذ الحملة في المواقع المحددة',
+      icon: '🚀'
+    },
+    {
+      step: 5,
+      title: 'المتابعة والتقييم',
+      description: 'نراقب الأداء ونقيس النتائج',
+      icon: '📈'
+    }
+  ]
+
+  const successfulCampaigns = [
+    {
+      client: 'شركة الأهرام للأغذية',
+      campaign: 'إطلاق منتج جديد',
+      location: 'المراكز التجارية الكبرى',
+      result: 'زيادة 300% في المبيعات',
+      image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop',
+      duration: '30 يوم'
+    },
+    {
+      client: 'شركة النقل السريع',
+      campaign: 'حملة التوعية بالخدمات',
+      location: 'الطرق الرئيسية والمحطات',
+      result: '50,000 عميل جديد',
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop',
+      duration: '45 يوم'
+    },
+    {
+      client: 'أكاديمية المستقبل',
+      campaign: 'التسجيل في الدورات',
+      location: 'الجامعات والمعاهد',
+      result: '1,000 طالب جديد',
+      image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=300&fit=crop',
+      duration: '60 يوم'
+    }
+  ]
+
+  const locationCategories = [
+    {
+      category: 'المواقع التجارية',
+      locations: ['المولات الكبرى', 'الأسواق المركزية', 'المراكز التجارية'],
+      audience: 'المتسوقون والعائلات',
+      bestFor: 'المنتجات الاستهلاكية'
+    },
+    {
+      category: 'الطرق والمواصلات',
+      locations: ['الطرق السريعة', 'محطات المترو', 'المطارات'],
+      audience: 'المسافرون والموظفون',
+      bestFor: 'الخدمات والعلامات التجارية'
+    },
+    {
+      category: 'المؤسسات التعليمية',
+      locations: ['الجامعات', 'المدارس', 'المعاهد'],
+      audience: 'الطلاب والشباب',
+      bestFor: 'التعليم والتكنولوجيا'
+    },
+    {
+      category: 'الأحياء السكنية',
+      locations: ['الأحياء الراقية', 'المجمعات السكنية', 'النوادي'],
+      audience: 'السكان المحليون',
+      bestFor: 'الخدمات المحلية'
+    }
+  ]
+
+  const serviceOptions = [
+    { value: 'outdoor-advertising', label: 'الإعلانات الخارجية' },
+    { value: 'marketing-events', label: 'الفعاليات التسويقية' },
+    { value: 'mobile-advertising', label: 'الإعلانات المتنقلة' },
+    { value: 'street-marketing', label: 'التسويق الشارعي' },
+    { value: 'location-analysis', label: 'دراسة المواقع' },
+    { value: 'campaign-management', label: 'إدارة الحملات' },
+    { value: 'consultation', label: 'استشارة مجانية' }
+  ];
+
+  return (
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="https://images.unsplash.com/photo-1533750516457-a7f992034fec?w=1920&h=1080&fit=crop"
+            alt="Field Ads Hero"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="hero-overlay" />
+        </div>
+
+        <div className="relative z-10 container-custom text-center text-white">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            className="max-w-4xl mx-auto"
+          >
+            <motion.div
+              className="flex justify-center mb-8"
+              animate={{ 
+                y: [0, -10, 0],
+                scale: [1, 1.1, 1]
+              }}
+              transition={{ 
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
+              <Megaphone className="w-20 h-20 text-gold" />
+            </motion.div>
+
+            <h1 className="heading-1 mb-6 text-gradient-gold">
+              إعلانات ميدانية مؤثرة
+            </h1>
+
+            {/* Add our parallax gallery here */}
+            <ParallaxGallery
+              items={[
+                {
+                  image: '/images/field-ads/outdoor-campaign.jpg',
+                  title: 'حملات إعلانية خارجية',
+                  description: 'إعلانات مبتكرة في المواقع الاستراتيجية تجذب انتباه الجمهور وتترك انطباعاً لا يُنسى'
+                },
+                {
+                  image: '/images/field-ads/event-marketing.jpg',
+                  title: 'تسويق الفعاليات',
+                  description: 'نجعل فعاليتك حديث المدينة من خلال حملات إعلانية مدروسة تصل إلى جمهورك المستهدف'
+                },
+                {
+                  image: '/images/field-ads/brand-activation.jpg',
+                  title: 'تفعيل العلامة التجارية',
+                  description: 'نصمم تجارب تفاعلية تربط جمهورك بعلامتك التجارية وتخلق ذكريات إيجابية دائمة'
+                },
+                {
+                  image: '/images/field-ads/guerrilla-marketing.jpg',
+                  title: 'التسويق الإبداعي',
+                  description: 'حملات إعلانية غير تقليدية تكسر المألوف وتخلق ضجة إعلامية حول علامتك التجارية'
+                }
+              ]}
+              isRtl={true}
+            />
+              <br />
+              <span className="text-white">تصل إلى جمهورك في المكان المناسب</span>
+            </h1>
+
+            <p className="text-xl lg:text-2xl mb-8 text-gray-200 leading-relaxed">
+              نصل بعلامتك التجارية إلى العملاء المحتملين في الأماكن التي يتواجدون فيها
+              <br />
+              من خلال حملات إعلانية ميدانية استراتيجية ومؤثرة
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+              <Link href="#contact" className="btn-primary text-lg px-8 py-4">
+                ابدأ حملتك الميدانية
+                <ArrowRight className="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0" />
+              </Link>
+              <Link href="#campaigns" className="btn-outline border-white text-white hover:bg-white hover:text-gold text-lg px-8 py-4">
+                شاهد حملاتنا الناجحة
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="section-padding bg-gray-50">
+        <div className="container-custom">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="heading-2 mb-6 text-gradient-gold">
+              مميزات إعلاناتنا الميدانية
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              نقدم حلولاً إعلانية ميدانية متكاملة تضمن وصول رسالتك بفعالية
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {fieldAdFeatures.map((feature, index) => (
+              <motion.div
+                key={index}
+                className="card p-6 text-center"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5 }}
+              >
+                <div className="flex justify-center mb-4">
+                  <feature.icon className="w-12 h-12 text-gold" />
+                </div>
+                <h3 className="text-lg font-bold mb-3 text-gray-800">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {feature.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Ad Types Section */}
+      <section className="section-padding">
+        <div className="container-custom">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="heading-2 mb-6 text-gradient-gold">
+              أنواع الإعلانات الميدانية
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              نقدم مجموعة متنوعة من الحلول الإعلانية الميدانية لتناسب احتياجاتك
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {adTypes.map((type, index) => (
+              <motion.div
+                key={index}
+                className="card overflow-hidden"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <div className="relative h-48">
+                  <Image
+                    src={type.image}
+                    alt={type.name}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4 text-white">
+                    <h3 className="font-bold text-lg mb-1">
+                      {type.name}
+                    </h3>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <p className="text-gray-600 text-sm mb-4">
+                    {type.description}
+                  </p>
+                  <div className="mb-4">
+                    <h4 className="font-semibold text-gray-800 mb-2">المواقع:</h4>
+                    <div className="flex flex-wrap gap-1">
+                      {type.locations.map((location, locIndex) => (
+                        <span
+                          key={locIndex}
+                          className="text-xs bg-gold/10 text-gold px-2 py-1 rounded-full"
+                        >
+                          {location}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="text-gold font-bold text-sm">
+                    {type.reach}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Location Categories Section */}
+      <section className="section-padding bg-gray-50">
+        <div className="container-custom">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="heading-2 mb-6 text-gradient-gold">
+              المواقع الاستراتيجية
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              نختار أفضل المواقع لضمان وصول إعلانك إلى الجمهور المناسب
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {locationCategories.map((category, index) => (
+              <motion.div
+                key={index}
+                className="card p-6"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <h3 className="font-bold text-gray-800 mb-4">
+                  {category.category}
+                </h3>
+                <div className="mb-4">
+                  <h4 className="font-semibold text-gray-700 mb-2 text-sm">المواقع:</h4>
+                  <ul className="space-y-1">
+                    {category.locations.map((location, locIndex) => (
+                      <li key={locIndex} className="text-sm text-gray-600 flex items-center">
+                        <CheckCircle className="w-3 h-3 text-gold mr-2 rtl:ml-2 rtl:mr-0 flex-shrink-0" />
+                        {location}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="mb-3">
+                  <h4 className="font-semibold text-gray-700 mb-1 text-sm">الجمهور:</h4>
+                  <p className="text-sm text-gray-600">{category.audience}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-700 mb-1 text-sm">الأنسب لـ:</h4>
+                  <p className="text-sm text-gold font-semibold">{category.bestFor}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Campaign Process Section */}
+      <section className="section-padding">
+        <div className="container-custom">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="heading-2 mb-6 text-gradient-gold">
+              عملية تنفيذ الحملة
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              نتبع منهجية علمية لضمان نجاح حملتك الإعلانية الميدانية
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+            {campaignProcess.map((step, index) => (
+              <motion.div
+                key={step.step}
+                className="text-center"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: index * 0.2 }}
+                viewport={{ once: true }}
+              >
+                <div className="relative mb-6">
+                  <div className="w-16 h-16 bg-gradient-gold rounded-full flex items-center justify-center text-black text-xl font-bold mx-auto mb-4">
+                    {step.step}
+                  </div>
+                  <div className="text-4xl mb-4">{step.icon}</div>
+                  {index < campaignProcess.length - 1 && (
+                    <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-gold to-transparent" />
+                  )}
+                </div>
+                <h3 className="text-lg font-bold mb-3 text-gray-800">
+                  {step.title}
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {step.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Successful Campaigns Section */}
+      <section id="campaigns" className="section-padding bg-gradient-dark text-white">
+        <div className="container-custom">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="heading-2 mb-6 text-gradient-gold">
+              حملات ناجحة أنجزناها
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              اكتشف بعض الحملات الإعلانية الميدانية الناجحة التي نفذناها لعملائنا
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {successfulCampaigns.map((campaign, index) => (
+              <motion.div
+                key={index}
+                className="card bg-white/10 backdrop-blur-sm overflow-hidden"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: index * 0.2 }}
+                viewport={{ once: true }}
+              >
+                <div className="relative h-48">
+                  <Image
+                    src={campaign.image}
+                    alt={campaign.client}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute top-4 right-4 bg-gold text-black px-2 py-1 rounded-full text-xs font-bold">
+                    {campaign.duration}
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="font-bold text-gold mb-2">
+                    {campaign.client}
+                  </h3>
+                  <h4 className="font-semibold text-white mb-3">
+                    {campaign.campaign}
+                  </h4>
+                  <div className="mb-4">
+                    <p className="text-gray-300 text-sm mb-2">
+                      <MapPin className="w-4 h-4 inline mr-1 rtl:ml-1 rtl:mr-0" />
+                      {campaign.location}
+                    </p>
+                  </div>
+                  <div className="text-gold font-bold flex items-center">
+                    <CheckCircle className="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0" />
+                    {campaign.result}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Form Section */}
+      <section id="contact" className="section-padding bg-gray-50">
+        <div className="container-custom">
+          <div className="max-w-4xl mx-auto">
+            <ContactForm
+              type="client"
+              title="ابدأ حملتك الإعلانية الميدانية"
+              subtitle="تواصل معنا لمناقشة أهدافك وكيف يمكننا تصميم حملة إعلانية ميدانية ناجحة لعلامتك التجارية"
+              serviceOptions={serviceOptions}
+            />
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
