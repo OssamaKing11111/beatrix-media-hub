@@ -42,7 +42,7 @@ interface ContentBlock {
     backgroundColor?: string
     padding?: string
     margin?: string
-    textAlign?: string
+    textAlign?: "left" | "right" | "center" | "justify"
     fontWeight?: string
   }
   created_at: string
@@ -238,7 +238,7 @@ export default function ContentEditor() {
         {/* Block Content */}
         <div 
           className="p-4 border border-gray-200 rounded-lg bg-white"
-          style={block.styles}
+          style={block.styles as any}
         >
           {block.type === 'text' && (
             <div className="min-h-[2rem]">
