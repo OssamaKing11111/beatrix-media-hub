@@ -2,7 +2,7 @@
 
 import { useSupabase } from '@/lib/supabase/provider'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/Button'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { useLanguage } from '@/lib/i18n/provider'
 
