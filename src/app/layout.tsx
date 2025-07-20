@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Toaster } from 'react-hot-toast'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import { LanguageProvider } from '@/contexts/LanguageContext'
+import { TranslationProvider } from '@/components/TranslationProvider'
 import { SupabaseProvider } from '@/lib/supabase/provider'
 import { Inter } from 'next/font/google'
 import './globals.css'
@@ -38,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body className={`${inter.className} font-arabic antialiased`}>
-        <LanguageProvider>
+        <TranslationProvider>
           <SupabaseProvider>
             <div className="min-h-screen flex flex-col">
               <Navbar />
@@ -56,7 +56,7 @@ export default function RootLayout({
               }}
             />
           </SupabaseProvider>
-        </LanguageProvider>
+        </TranslationProvider>
       </body>
     </html>
   )

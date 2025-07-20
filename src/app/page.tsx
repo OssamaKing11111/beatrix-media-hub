@@ -19,12 +19,12 @@ import {
 } from 'lucide-react'
 import { clientLogos, partnerLogos, testimonials, features, workSteps } from '@/config/content'
 import FeaturedClientsMarquee from '@/components/FeaturedClientsMarquee'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { useTranslation } from '@/components/TranslationProvider'
 
 export default function HomePage() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
-  const { language } = useLanguage()
+  const { currentLanguage } = useTranslation()
 
   // Auto-rotate testimonials
   useEffect(() => {
@@ -85,10 +85,10 @@ export default function HomePage() {
   }
 
   const heroStats = [
-    { number: '500+', label: content.stats.satisfiedClients[language], icon: Users },
-    { number: '1000+', label: content.stats.completedProjects[language], icon: Award },
-    { number: '15+', label: content.stats.yearsExperience[language], icon: TrendingUp },
-    { number: '50+', label: content.stats.awards[language], icon: Star },
+    { number: '500+', label: content.stats.satisfiedClients[currentLanguage], icon: Users },
+    { number: '1000+', label: content.stats.completedProjects[currentLanguage], icon: Award },
+    { number: '15+', label: content.stats.yearsExperience[currentLanguage], icon: TrendingUp },
+    { number: '50+', label: content.stats.awards[currentLanguage], icon: Star },
   ]
 
   return (
@@ -152,7 +152,7 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.2 }}
             >
-              {content.hero.title[language]}
+              {content.hero.title[currentLanguage]}
             </motion.h1>
 
             <motion.p
@@ -161,7 +161,7 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.4 }}
             >
-              {content.hero.subtitle[language]}
+              {content.hero.subtitle[currentLanguage]}
             </motion.p>
 
             <motion.div
@@ -171,7 +171,7 @@ export default function HomePage() {
               transition={{ duration: 1, delay: 0.6 }}
             >
               <Link href="/clients" className="btn-primary text-lg px-8 py-4">
-                {content.hero.getStarted[language]}
+                {content.hero.getStarted[currentLanguage]}
                 <ArrowRight className="w-5 h-5 mr-2 rtl:ml-2 rtl:mr-0" />
               </Link>
               
@@ -180,7 +180,7 @@ export default function HomePage() {
                 className="btn-outline text-lg px-8 py-4 flex items-center"
               >
                 <Play className="w-5 h-5 ml-2 rtl:mr-2 rtl:ml-0" />
-                {content.hero.watchVideo[language]}
+                {content.hero.watchVideo[currentLanguage]}
               </button>
             </motion.div>
 
@@ -265,10 +265,10 @@ export default function HomePage() {
             viewport={{ once: true }}
           >
             <h2 className="heading-2 mb-6 text-gradient-gold">
-              {content.whyChoose.title[language]}
+              {content.whyChoose.title[currentLanguage]}
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              {content.whyChoose.subtitle[language]}
+              {content.whyChoose.subtitle[currentLanguage]}
             </p>
           </motion.div>
 
@@ -285,10 +285,10 @@ export default function HomePage() {
               >
                 <div className="text-6xl mb-6">{feature.icon}</div>
                 <h3 className="text-xl font-bold mb-4 text-gray-800">
-                  {feature.title[language]}
+                  {feature.title[currentLanguage]}
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  {feature.description[language]}
+                  {feature.description[currentLanguage]}
                 </p>
               </motion.div>
             ))}
@@ -486,3 +486,4 @@ export default function HomePage() {
     </div>
   )
 }
+console.log("SUPABASE_URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);

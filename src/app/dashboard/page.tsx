@@ -1,425 +1,114 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { 
-  Users, 
-  FileText, 
-  MessageSquare, 
-  Settings, 
-  Plus, 
-  Edit, 
-  Trash2,
-  Eye,
-  Calendar,
-  TrendingUp,
-  Activity,
-  Video,
-  Image,
-  Globe,
-  Star,
-  Briefcase,
-  FileVideo,
-  ImageIcon,
-  Type,
-  Link,
-  Download,
-  Upload,
-  Home
-} from "lucide-react";
-import { Button } from "@/components/ui/Button";
-import { supabase } from "@/lib/supabase";
+import React from "react";
+import { Home, FileText, Users, Settings, LogOut, Plus, Edit, Trash2, Menu, Search, Globe } from "lucide-react";
 
-interface DashboardStats {
-  totalPages: number;
-  totalRequests: number;
-  totalServices: number;
-  totalMedia: number;
-  totalTestimonials: number;
-  totalPortfolio: number;
-}
+const pages = [
+  { id: 1, name: "الرئيسية / Home", slug: "home" },
+  { id: 2, name: "من نحن / About", slug: "about" },
+  { id: 3, name: "الخدمات / Services", slug: "services" },
+  { id: 4, name: "العملاء / Clients", slug: "clients" },
+  { id: 5, name: "الميديا / Media", slug: "media" },
+  { id: 6, name: "اتصل بنا / Contact", slug: "contact" },
+  // ... أضف المزيد من الصفحات هنا
+];
 
-interface ContentItem {
-  id: string;
-  type: "video" | "image" | "text" | "link";
-  title: string;
-  description: string;
-  url?: string;
-  file_path?: string;
-  section: string;
-  created_at: string;
-}
-
-export default function Dashboard() {
-  const [stats, setStats] = useState<DashboardStats>({
-    totalPages: 0,
-    totalRequests: 0,
-    totalServices: 0,
-    totalMedia: 0,
-    totalTestimonials: 0,
-    totalPortfolio: 0
-  });
-  const [contentItems, setContentItems] = useState<ContentItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedSection, setSelectedSection] = useState<string>("all");
-
-  useEffect(() => {
-    loadDashboardData();
-  }, []);
-
-  const loadDashboardData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      // Load basic stats from correct tables
-      const [pagesResult, requestsResult, servicesResult, mediaResult, testimonialsResult, portfolioResult] = await Promise.all([
-        supabase.from("pages").select("*, { count: 'exact', head: true }"),
-        supabase.from("requests").select("*, { count: 'exact', head: true }"),
-        supabase.from("services").select("*, { count: 'exact', head: true }"),
-        supabase.from("media").select("*, { count: 'exact', head: true }"),
-        supabase.from("testimonials").select("*, { count: 'exact', head: true }"),
-        supabase.from("portfolio").select("*, { count: 'exact', head: true }")
-      ]);
-
-      setStats({
-        totalPages: pagesResult.count || 0,
-        totalRequests: requestsResult.count || 0,
-        totalServices: servicesResult.count || 0,
-        totalMedia: mediaResult.count || 0,
-        totalTestimonials: testimonialsResult.count || 0,
-        totalPortfolio: portfolioResult.count || 0
-      });
-
-      // Load content items from page_content table
-      const { data: content, error: contentError } = await supabase
-        .from("page_content")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (contentError) {
-        console.error("Content loading error:", contentError);
-        // If table doesn't exist, create sample data
-        setContentItems([
-          {
-            id: "1",
-            type: "text",
-            title: "العنوان الرئيسي",
-            description: "منصتك الشاملة للتميز والانتشار",
-            section: "hero",
-            created_at: new Date().toISOString()
-          },
-          {
-            id: "2",
-            type: "text",
-            title: "الوصف الرئيسي",
-            description: "نحول أفكارك إلى واقع مؤثر بأعلى معايير الجودة والاحترافية",
-            section: "hero",
-            created_at: new Date().toISOString()
-          },
-          {
-            id: "3",
-            type: "video",
-            title: "فيديو تعريفي",
-            description: "فيديو تعريفي عن الشركة",
-            url: "/videos/intro.mp4",
-            section: "hero",
-            created_at: new Date().toISOString()
-          }
-        ]);
-      } else if (content) {
-        // Transform page_content to ContentItem format
-        const transformedContent = content.map(item => ({
-          id: item.id,
-          type: item.content_type as "video" | "image" | "text" | "link",
-          title: item.key,
-          description: item.value_ar || item.value_en || "",
-          url: item.file_url,
-          section: item.section,
-          created_at: item.created_at
-        }));
-        setContentItems(transformedContent);
-      }
-
-    } catch (error) {
-      console.error("Dashboard loading error:", error);
-      setError("حدث خطأ في تحميل البيانات");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleContentUpdate = async (itemId: string, updates: Partial<ContentItem>) => {
-    try {
-      const { error } = await supabase
-        .from("page_content")
-        .update({
-          value_ar: updates.description,
-          value_en: updates.description,
-          updated_at: new Date().toISOString()
-        })
-        .eq("id", itemId);
-
-      if (error) {
-        console.error("Update error:", error);
-        // For demo, update local state
-        setContentItems(prev => 
-          prev.map(item => 
-            item.id === itemId ? { ...item, ...updates } : item
-          )
-        );
-      } else {
-        await loadDashboardData();
-      }
-    } catch (error) {
-      console.error("Content update error:", error);
-    }
-  };
-
-  const handleContentDelete = async (itemId: string) => {
-    try {
-      const { error } = await supabase
-        .from("page_content")
-        .delete()
-        .eq("id", itemId);
-
-      if (error) {
-        console.error("Delete error:", error);
-        // For demo, update local state
-        setContentItems(prev => prev.filter(item => item.id !== itemId));
-      } else {
-        await loadDashboardData();
-      }
-    } catch (error) {
-      console.error("Content delete error:", error);
-    }
-  };
-
-  const statsCards = [
-    {
-      title: "الصفحات",
-      value: stats.totalPages,
-      icon: Home,
-      color: "bg-blue-500",
-      description: "إجمالي الصفحات"
-    },
-    {
-      title: "الطلبات",
-      value: stats.totalRequests,
-      icon: FileText,
-      color: "bg-green-500",
-      description: "طلبات الخدمات المقدمة"
-    },
-    {
-      title: "الخدمات",
-      value: stats.totalServices,
-      icon: Briefcase,
-      color: "bg-purple-500",
-      description: "الخدمات المتاحة"
-    },
-    {
-      title: "الوسائط",
-      value: stats.totalMedia,
-      icon: Image,
-      color: "bg-orange-500",
-      description: "الملفات والوسائط"
-    },
-    {
-      title: "التوصيات",
-      value: stats.totalTestimonials,
-      icon: Star,
-      color: "bg-yellow-500",
-      description: "توصيات العملاء"
-    },
-    {
-      title: "الأعمال",
-      value: stats.totalPortfolio,
-      icon: FileVideo,
-      color: "bg-red-500",
-      description: "معرض الأعمال"
-    }
-  ];
-
-  const filteredContent = selectedSection === "all" 
-    ? contentItems 
-    : contentItems.filter(item => item.section === selectedSection);
-
-  const sections = ["all", "hero", "about", "services", "contact", "footer"];
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500 mx-auto"></div>
-          <p className="mt-4 text-gray-600">جاري تحميل البيانات...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">خطأ في التحميل</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <Button onClick={loadDashboardData} className="bg-blue-500 hover:bg-blue-600">
-            إعادة المحاولة
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
+export default function DashboardHome() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">لوحة التحكم</h1>
-              <p className="text-gray-600 mt-1">إدارة محتوى الموقع والبيانات</p>
-            </div>
-            <div className="flex space-x-3 space-x-reverse">
-              <Button className="bg-blue-500 hover:bg-blue-600">
-                <Plus className="w-4 h-4 ml-2" />
-                إضافة محتوى جديد
-              </Button>
-              <Button variant="outline">
-                <Settings className="w-4 h-4 ml-2" />
-                الإعدادات
-              </Button>
+    <div className="min-h-screen flex bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-64 bg-white shadow-lg flex flex-col">
+        <div className="h-20 flex items-center justify-center border-b">
+          <span className="text-2xl font-bold text-gold flex items-center gap-2">
+            <Menu className="w-6 h-6 text-gold" />
+            Beatrix Admin
+          </span>
+        </div>
+        <nav className="flex-1 py-6 px-4 space-y-2">
+          <a href="#" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gold/10 text-gray-800 font-medium">
+            <Home className="w-5 h-5" /> Dashboard
+          </a>
+          <a href="#" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gold/10 text-gray-800 font-medium">
+            <FileText className="w-5 h-5" /> Pages
+          </a>
+          <a href="#" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gold/10 text-gray-800 font-medium">
+            <Users className="w-5 h-5" /> Users
+          </a>
+          <a href="#" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gold/10 text-gray-800 font-medium">
+            <Settings className="w-5 h-5" /> Settings
+          </a>
+        </nav>
+        <div className="p-4 border-t flex items-center gap-3">
+          <img src="/public/images/avatar.png" alt="User" className="w-10 h-10 rounded-full border" />
+          <div className="flex-1">
+            <div className="font-semibold text-gray-800">Admin</div>
+            <div className="text-xs text-gray-500">admin@beatrix.com</div>
+          </div>
+          <button className="p-2 hover:bg-gray-100 rounded-full">
+            <LogOut className="w-5 h-5 text-gray-500" />
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col">
+        {/* Topbar */}
+        <header className="h-20 bg-white shadow flex items-center px-8 justify-between">
+          <div className="flex items-center gap-4">
+            <button className="p-2 hover:bg-gray-100 rounded-full lg:hidden">
+              <Menu className="w-6 h-6 text-gold" />
+            </button>
+            <div className="relative">
+              <input type="text" placeholder="Search pages..." className="pl-10 pr-4 py-2 rounded-lg border bg-gray-50 focus:outline-gold" />
+              <Search className="absolute left-2 top-2 w-5 h-5 text-gray-400" />
             </div>
           </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
-          {statsCards.map((card, index) => (
-            <motion.div
-              key={card.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="bg-white rounded-lg shadow-sm border p-6"
-            >
-              <div className="flex items-center">
-                <div className={`p-3 rounded-lg ${card.color} text-white`}>
-                  <card.icon className="w-6 h-6" />
-                </div>
-                <div className="mr-4">
-                  <p className="text-sm font-medium text-gray-600">{card.title}</p>
-                  <p className="text-2xl font-bold text-gray-900">{card.value}</p>
-                </div>
-              </div>
-              <p className="text-xs text-gray-500 mt-2">{card.description}</p>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Content Management */}
-        <div className="bg-white rounded-lg shadow-sm border">
-          <div className="p-6 border-b">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold text-gray-900">إدارة المحتوى</h2>
-              <div className="flex space-x-2 space-x-reverse">
-                <select
-                  value={selectedSection}
-                  onChange={(e) => setSelectedSection(e.target.value)}
-                  className="border border-gray-300 rounded-md px-3 py-2 text-sm"
-                >
-                  {sections.map(section => (
-                    <option key={section} value={section}>
-                      {section === "all" ? "جميع الأقسام" : section}
-                    </option>
-                  ))}
-                </select>
-                <Button className="bg-green-500 hover:bg-green-600">
-                  <Plus className="w-4 h-4 ml-2" />
-                  إضافة
-                </Button>
-              </div>
-            </div>
+          <div className="flex items-center gap-4">
+            <button className="p-2 hover:bg-gray-100 rounded-full">
+              <Globe className="w-5 h-5 text-gold" />
+            </button>
+            <img src="/public/images/avatar.png" alt="User" className="w-10 h-10 rounded-full border" />
           </div>
+        </header>
 
-          <div className="p-6">
-            {filteredContent.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="text-gray-400 text-6xl mb-4">📝</div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">لا يوجد محتوى</h3>
-                <p className="text-gray-600">ابدأ بإضافة محتوى جديد للموقع</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredContent.map((item) => (
-                  <motion.div
-                    key={item.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="bg-gray-50 rounded-lg p-4 border"
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div className={`p-2 rounded-lg ${getTypeColor(item.type)} text-white`}>
-                        {getTypeIcon(item.type)}
-                      </div>
-                      <div className="flex space-x-1 space-x-reverse">
-                        <Button size="sm" variant="outline">
-                          <Edit className="w-3 h-3" />
-                        </Button>
-                        <Button size="sm" variant="outline" className="text-red-500 hover:text-red-700">
-                          <Trash2 className="w-3 h-3" />
-                        </Button>
-                      </div>
-                    </div>
-                    <h3 className="font-medium text-gray-900 mb-2">{item.title}</h3>
-                    <p className="text-sm text-gray-600 mb-3">{item.description}</p>
-                    <div className="flex items-center justify-between text-xs text-gray-500">
-                      <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                        {item.section}
-                      </span>
-                      <span>{new Date(item.created_at).toLocaleDateString('ar-EG')}</span>
-                    </div>
-                  </motion.div>
+        {/* Content Area */}
+        <section className="flex-1 p-8 overflow-auto">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-3xl font-bold text-gray-900">Pages</h1>
+            <button className="flex items-center gap-2 bg-gold text-white px-4 py-2 rounded-lg hover:bg-yellow-600">
+              <Plus className="w-5 h-5" /> Add Page
+            </button>
+          </div>
+          <div className="bg-white rounded-lg shadow p-4 overflow-x-auto">
+            <table className="min-w-full">
+              <thead>
+                <tr className="text-left text-gray-600 border-b">
+                  <th className="py-2 px-4">#</th>
+                  <th className="py-2 px-4">Page Name</th>
+                  <th className="py-2 px-4">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pages.map((page, idx) => (
+                  <tr key={page.id} className="border-b hover:bg-gray-50">
+                    <td className="py-2 px-4 font-semibold text-gray-500">{idx + 1}</td>
+                    <td className="py-2 px-4 font-medium text-gray-800">{page.name}</td>
+                    <td className="py-2 px-4 flex gap-2">
+                      <button className="p-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 flex items-center gap-1">
+                        <Edit className="w-4 h-4" /> Edit
+                      </button>
+                      <button className="p-2 bg-red-100 text-red-700 rounded hover:bg-red-200 flex items-center gap-1">
+                        <Trash2 className="w-4 h-4" /> Delete
+                      </button>
+                      <button className="p-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 flex items-center gap-1">
+                        <Menu className="w-4 h-4" /> Reorder
+                      </button>
+                    </td>
+                  </tr>
                 ))}
-              </div>
-            )}
+              </tbody>
+            </table>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   );
-}
-
-function getTypeIcon(type: string) {
-  switch (type) {
-    case "video":
-      return <Video className="w-4 h-4" />;
-    case "image":
-      return <Image className="w-4 h-4" />;
-    case "text":
-      return <Type className="w-4 h-4" />;
-    case "link":
-      return <Link className="w-4 h-4" />;
-    default:
-      return <FileText className="w-4 h-4" />;
-  }
-}
-
-function getTypeColor(type: string) {
-  switch (type) {
-    case "video":
-      return "bg-red-500";
-    case "image":
-      return "bg-green-500";
-    case "text":
-      return "bg-blue-500";
-    case "link":
-      return "bg-purple-500";
-    default:
-      return "bg-gray-500";
-  }
 }

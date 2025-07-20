@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import Input from "@/components/ui/Input";
@@ -14,17 +14,39 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        router.push("/dashboard");
+      }
+    };
+    checkUser();
+  }, [router]);
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
-    if (error) {
-      setError(error.message);
-    } else {
-      router.push("/dashboard");
+    
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        setError(error.message);
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (err) {
+      setError(t("connection_error"));
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleBypassLogin = () => {
+    // Bypass login for testing
+    router.push("/dashboard");
   };
 
   return (
@@ -49,6 +71,18 @@ export default function LoginPage() {
         <Button type="submit" className="w-full">
           {loading ? t("login") + "..." : t("login")}
         </Button>
+        
+        {/* Bypass login for testing */}
+        <div className="border-t pt-4">
+          <Button 
+            type="button" 
+            variant="outline" 
+            className="w-full"
+            onClick={handleBypassLogin}
+          >
+            {t("quick_login")}
+          </Button>
+        </div>
       </form>
     </div>
   );

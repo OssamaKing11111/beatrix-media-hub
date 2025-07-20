@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/components/ui/Card";
 import {
   Menu,
   X,

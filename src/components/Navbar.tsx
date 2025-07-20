@@ -5,14 +5,14 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X, ChevronDown, Camera, Facebook, Instagram, Linkedin, Youtube, MessageCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useLanguage } from '@/contexts/LanguageContext'
+import { useTranslation } from '@/components/TranslationProvider'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
-  const { language, toggleLanguage } = useLanguage()
+  const { currentLanguage, setLanguage } = useTranslation()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -102,7 +102,7 @@ const Navbar = () => {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
       }`}
-      dir={language === 'ar' ? 'rtl' : 'ltr'}
+      dir={currentLanguage === 'ar' ? 'rtl' : 'ltr'}
     >
       <div className="container-custom">
         <div className="flex items-center justify-between h-20">
@@ -117,10 +117,10 @@ const Navbar = () => {
             </motion.div>
             <div className="flex flex-col">
               <span className="text-xl font-bold text-gradient-gold">
-                {language === 'ar' ? 'بياتريكس ون' : 'Beatrix One'}
+                {currentLanguage === 'ar' ? 'بياتريكس ون' : 'Beatrix One'}
               </span>
               <span className="text-xs text-gray-600">
-                {language === 'ar' ? 'منصتك الشاملة' : 'Your Complete Platform'}
+                {currentLanguage === 'ar' ? 'منصتك الشاملة' : 'Your Complete Platform'}
               </span>
             </div>
           </Link>
@@ -140,7 +140,7 @@ const Navbar = () => {
                     pathname === item.href ? 'nav-link-active' : ''
                   }`}
                 >
-                  <span>{item.name[language]}</span>
+                  <span>{item.name[currentLanguage]}</span>
                   {item.dropdown && <ChevronDown className="w-4 h-4" />}
                 </Link>
 
@@ -161,7 +161,7 @@ const Navbar = () => {
                             href={dropdownItem.href}
                             className="dropdown-item"
                           >
-                            {dropdownItem.name[language]}
+                            {dropdownItem.name[currentLanguage]}
                           </Link>
                         ))}
                       </motion.div>
@@ -192,10 +192,10 @@ const Navbar = () => {
 
             {/* Single Language Toggle */}
             <button
-              onClick={toggleLanguage}
+              onClick={() => setLanguage(currentLanguage === 'ar' ? 'en' : 'ar')}
               className="btn-outline text-sm px-3 py-2"
             >
-              {language === 'ar' ? 'English' : 'عربي'}
+              {currentLanguage === 'ar' ? 'English' : 'عربي'}
             </button>
           </div>
 
@@ -229,7 +229,7 @@ const Navbar = () => {
                       }`}
                       onClick={() => setIsOpen(false)}
                     >
-                      {item.name[language]}
+                      {item.name[currentLanguage]}
                     </Link>
                     {item.dropdown && (
                       <div className="pl-8 rtl:pr-8 rtl:pl-0 space-y-1">
@@ -240,7 +240,7 @@ const Navbar = () => {
                             className="block px-4 py-2 text-sm text-gray-600 hover:text-gold transition-colors duration-200"
                             onClick={() => setIsOpen(false)}
                           >
-                            {dropdownItem.name[language]}
+                            {dropdownItem.name[currentLanguage]}
                           </Link>
                         ))}
                       </div>
@@ -252,12 +252,12 @@ const Navbar = () => {
                 <div className="px-4 py-3 border-t border-gray-100">
                   <button
                     onClick={() => {
-                      toggleLanguage()
+                      setLanguage(currentLanguage === 'ar' ? 'en' : 'ar')
                       setIsOpen(false)
                     }}
                     className="btn-outline w-full text-sm px-3 py-2"
                   >
-                    {language === 'ar' ? 'English' : 'عربي'}
+                    {currentLanguage === 'ar' ? 'English' : 'عربي'}
                   </button>
                 </div>
               </div>

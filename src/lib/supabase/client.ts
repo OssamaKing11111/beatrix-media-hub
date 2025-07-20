@@ -1,17 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-if (!supabaseUrl) {
-  throw new Error('Missing environment variable: NEXT_PUBLIC_SUPABASE_URL')
-}
-
-if (!supabaseAnonKey) {
-  throw new Error('Missing environment variable: NEXT_PUBLIC_SUPABASE_ANON_KEY')
-}
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = createClient(
+  'https://khaeaufrdnzovsbhaqgk.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtoYWVhdWZyZG56b3ZzYmhhcWdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI2NzgzMzAsImV4cCI6MjA2ODI1NDMzMH0.B5Lv83e7KF7-5IV6tgsT6DB_eDQ4hTWG19qPMgIP4TU'
+)
 
 export type Database = {
   public: {
