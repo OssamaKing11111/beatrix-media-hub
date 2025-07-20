@@ -1,0 +1,138 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "services": "Services",
+    "portfolio": "Portfolio",
+    "blog": "Blog",
+    "login": "Login",
+    "dashboard": "Dashboard"
+  },
+  "homepage": {
+    "hero": {
+      "title": "Welcome to Beatrix Media Hub",
+      "subtitle": "Your Gateway to Professional Media Production",
+      "cta": "Get Started",
+      "description": "We specialize in creating high-quality media content for businesses worldwide"
+    },
+    "services": {
+      "title": "Our Services",
+      "production": "Video Production",
+      "media": "Media Management",
+      "ads": "Advertising Solutions"
+    },
+    "clients": {
+      "title": "Our Clients",
+      "description": "Trusted by leading companies across industries"
+    }
+  },
+  "about": {
+    "title": "About Beatrix Media Hub",
+    "mission": "Our Mission",
+    "vision": "Our Vision",
+    "values": "Our Values",
+    "team": "Our Team",
+    "history": "Company History"
+  },
+  "services": {
+    "production": {
+      "title": "Video Production Services",
+      "cinematic": "Cinematic Productions",
+      "commercials": "Commercial Videos",
+      "documentaries": "Documentaries",
+      "corporate": "Corporate Videos"
+    },
+    "media": {
+      "title": "Media Services",
+      "management": "Media Management",
+      "editing": "Video Editing",
+      "post": "Post-Production"
+    },
+    "ads": {
+      "title": "Advertising Solutions",
+      "tv": "TV Commercials",
+      "digital": "Digital Ads",
+      "social": "Social Media Ads"
+    }
+  },
+  "clients": {
+    "clothing": {
+      "title": "Clothing Companies",
+      "description": "Fashion and apparel industry solutions"
+    },
+    "food": {
+      "title": "Food Companies",
+      "description": "Restaurant and food service marketing"
+    },
+    "education": {
+      "title": "Education Companies",
+      "description": "Educational content and marketing"
+    },
+    "medical": {
+      "title": "Medical & Healthcare",
+      "description": "Healthcare marketing and education"
+    },
+    "startups": {
+      "title": "Startup Companies",
+      "description": "Innovative startup marketing solutions"
+    },
+    "tech": {
+      "title": "Technology Companies",
+      "description": "Tech industry marketing and branding"
+    },
+    "tourism": {
+      "title": "Tourism Companies",
+      "description": "Travel and tourism marketing"
+    },
+    "transport": {
+      "title": "Transport Companies",
+      "description": "Transportation and logistics marketing"
+    }
+  },
+  "community": {
+    "title": "Community",
+    "business": "Business Community",
+    "creators": "Content Creators",
+    "initiatives": "Community Initiatives",
+    "startups": "Startup Community",
+    "students": "Student Programs",
+    "civil": "Civil Society"
+  },
+  "partners": {
+    "title": "Our Partners",
+    "advertising": "Advertising Partners",
+    "production": "Production Partners",
+    "distribution": "Distribution Partners"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "pages": "Pages",
+    "media": "Media",
+    "content": "Content",
+    "settings": "Settings",
+    "users": "Users",
+    "analytics": "Analytics",
+    "add_page": "Add New Page",
+    "edit_page": "Edit Page",
+    "delete_page": "Delete Page",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  },
+  "common": {
+    "read_more": "Read More",
+    "learn_more": "Learn More",
+    "contact_us": "Contact Us",
+    "get_quote": "Get Quote",
+    "view_portfolio": "View Portfolio",
+    "follow_us": "Follow Us",
+    "subscribe": "Subscribe",
+    "newsletter": "Newsletter",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "copyright": "© 2024 Beatrix Media Hub. All rights reserved."
+  }
+} 
